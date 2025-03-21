@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router"; // Import router for navigation
+import { Ionicons } from "@expo/vector-icons"; // ✅ Import search icon
 
 // Sample recipe data
 const recipes = [
@@ -19,22 +20,20 @@ const recipes = [
     detailsImage: require("../../assets/images/Adobo1.png"),
     description: "A classic Filipino dish with soy sauce and vinegar.",
     ingredients: [
-      "3 tbsp vegetable oil",
-      "1 head garlic, crushed",
-      "2 onions, minced",
-      "1/2 kg pork belly, sliced",
-      "1 pc pork cube",
-      "3 tbsp oyster sauce",
+      "0.5 kg pork liempo",
+      "1 sachet MAGGI Oyster Sauce",
+      "1 head garlic",
+      "3 tbsp white vinegar",
       "1 cup water",
-      "3 tbsp vinegar",
-      "3 pcs laurel leaves",
-      "1 tsp brown sugar",
-      "1 tsp whole black pepper",
+      "1 tsp black peppercorn",
+      "2 pcs bay leaf",
+      "1 tbsp vegetable oil",
+      "1 sachet MAGGI Magic Sarap",
     ],
     steps: [
-      "Get a pot and make it nice and hot over medium heat. Pour some oil and saute garlic and onions. Add pork and continue sauteing until cooked.",
-      "Pour oyster sauce, water vinegar, laurel leaves, sugar, and pepper. Add pork cubes. Bring to a boil and reduce heat to a simmer, make sure that you don't cover the pan to evaporate the vinegar. Cook for 10 more minutes",
-      "Remove the meat from the sauce and fry, to add crispiness and color to the meat. Return the fried meat in sauce. Reheat and simmer until sauce thickens.",
+      "50 MINUTES. Combine pork, MAGGI Oyster Sauce, garlic, vinegar, water, peppercorn and bay leaf in a pot. Cover and simmer for 45mins. Strain pork and set aside.",
+      "10 MINUTES. Sauté pork and garlic in oil until light golden brown. Pour cooking liquid and season with MAGGI Magic Sarap®. Simmer until sauce is thick and coating the pork.",
+      "1 MINUTE. Transfer on a serving plate and serve.",
     ],
   },
   {
@@ -292,6 +291,10 @@ export default function HomeScreen() {
   const [search, setSearch] = useState(""); // State to manage search input
   const router = useRouter(); // Initialize router for navigation
 
+  const handleSearch = () => {
+    console.log("Searching for:", search);
+  };
+
   // Function to filter recipes based on user input
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(search.toLowerCase())
@@ -299,16 +302,27 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* App Title */}
-      <Text style={styles.header}>Recipe Book</Text>
+      {/* ✅ Logo & Title Section */}
+      <View style={styles.header}>
+        <Image
+          source={require("../../assets/images/Logo.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.appTitle}>Recipe Book</Text>
+      </View>
 
-      {/* Search Bar */}
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search recipes..."
-        onChangeText={setSearch} // Updates state as user types
-        value={search} // Displays search value
-      />
+      {/* ✅ Search Bar with Icon */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search recipes..."
+          onChangeText={setSearch}
+          value={search}
+        />
+        <TouchableOpacity onPress={handleSearch} style={styles.searchIcon}>
+          <Ionicons name="search" size={24} color="#333" />
+        </TouchableOpacity>
+      </View>
 
       {/* FlatList to display recipes dynamically */}
       <FlatList
@@ -335,19 +349,46 @@ export default function HomeScreen() {
 
 // Styles
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fafafa", padding: 20 },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#fafafa", 
+    padding: 20 
+  },
+
   header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
-  searchBar: {
+
+  logo: { 
+    width: 50, 
+    height: 50, 
+    resizeMode: "contain" 
+  }, // ✅ Adjust logo size
+
+  appTitle: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    textAlign: "right", 
+    flex: 1 }, // ✅ Move title to the right
+
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fff",
-    padding: 10,
     borderRadius: 8,
+    paddingHorizontal: 10,
     marginBottom: 10,
   },
+
+  searchBar: { 
+    flex: 1, 
+    padding: 10 },
+
+  searchIcon: { padding: 10 },
+
   card: {
     borderRadius: 10,
     overflow: "hidden",
@@ -358,7 +399,9 @@ const styles = StyleSheet.create({
   image: { 
     width: "100%", 
     height: "100%", 
-    resizeMode: "cover" },
+    resizeMode: "cover" 
+  },
+  
   name: {
     position: "absolute",
     bottom: 10,
